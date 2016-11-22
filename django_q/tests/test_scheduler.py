@@ -1,5 +1,5 @@
 from datetime import timedelta
-from multiprocessing import Queue, Event, Value
+from multiprocessing.dummy import Queue, Event, Value
 
 import arrow
 import pytest

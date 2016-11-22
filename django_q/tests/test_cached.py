@@ -1,4 +1,4 @@
-from multiprocessing import Event, Queue, Value
+from multiprocessing.dummy import Event, Queue, Value
 
 import pytest
 

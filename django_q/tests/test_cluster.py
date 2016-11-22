@@ -1,6 +1,6 @@
 import sys
 import threading
-from multiprocessing import Queue, Event, Value
+from multiprocessing.dummy import Queue, Event, Value
 from time import sleep
 from django.utils import timezone
 

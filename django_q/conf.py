@@ -1,7 +1,7 @@
 import logging
 from copy import deepcopy
 from signal import signal
-from multiprocessing import cpu_count, Queue
+from multiprocessing.dummy import cpu_count, Queue
 
 # django
 from django.utils.translation import ugettext_lazy as _

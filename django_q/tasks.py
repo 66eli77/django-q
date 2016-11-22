@@ -1,5 +1,5 @@
 """Provides task functionality."""
-from multiprocessing import Queue, Value
+from multiprocessing.dummy import Queue, Value
 
 # django
 from django.db import IntegrityError

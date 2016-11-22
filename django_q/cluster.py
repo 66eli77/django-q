@@ -19,7 +19,7 @@ import ast
 import traceback
 from time import sleep
 from functools import partial
-from multiprocessing import Queue, Event, Process, Value, current_process
+from multiprocessing.dummy import Queue, Event, Process, Value, current_process
 
 # external
 import arrow
