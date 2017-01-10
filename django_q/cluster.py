@@ -38,8 +38,6 @@ from django_q.models import Task, Success, Schedule
 from django_q.status import Stat, Status
 from django_q.brokers import get_broker
 
-import os
-
 
 class Cluster(object):
     def __init__(self, broker=None):
@@ -47,7 +45,7 @@ class Cluster(object):
         self.sentinel = None
         self.stop_event = None
         self.start_event = None
-        self.pid = os.getpid()
+        self.pid = current_process().ident
         self.host = socket.gethostname()
         self.timeout = Conf.TIMEOUT
         signal.signal(signal.SIGTERM, self.sig_handler)
@@ -109,7 +107,7 @@ class Sentinel(object):
         # Make sure we catch signals for the pool
         signal.signal(signal.SIGINT, signal.SIG_IGN)
         signal.signal(signal.SIGTERM, signal.SIG_DFL)
-        self.pid = os.getpid()
+        self.pid = current_process().ident
         self.parent_pid = get_ppid()
         self.name = current_process().name
         self.broker = broker or get_broker()
@@ -290,7 +288,7 @@ def pusher(task_queue, event, broker=None):
     """
     if not broker:
         broker = get_broker()
-    logger.info(_('{} pushing tasks at {}').format(current_process().name, os.getpid()))
+    logger.info(_('{} pushing tasks at {}').format(current_process().name, current_process().ident))
     while True:
         try:
             task_set = broker.dequeue()
@@ -325,7 +323,7 @@ def monitor(result_queue, broker=None):
     if not broker:
         broker = get_broker()
     name = current_process().name
-    logger.info(_("{} monitoring at {}").format(name, os.getpid()))
+    logger.info(_("{} monitoring at {}").format(name, current_process().ident))
     for task in iter(result_queue.get, 'STOP'):
         # save the result
         if task.get('cached', False):
@@ -354,7 +352,7 @@ def worker(task_queue, result_queue, timer, timeout=Conf.TIMEOUT):
     :type timer: multiprocessing.Value
     """
     name = current_process().name
-    logger.info(_('{} ready for work at {}').format(name, os.getpid()))
+    logger.info(_('{} ready for work at {}').format(name, current_process().ident))
     task_count = 0
     # Start reading the task queue
     for task in iter(task_queue.get, 'STOP'):
